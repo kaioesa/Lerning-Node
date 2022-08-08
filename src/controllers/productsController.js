@@ -75,6 +75,22 @@ class ProductController {
       }
     });
   };
+
+  static getProductByPublisher = (req, res) => {
+    const publisher = req.query.publisher;
+
+    products.find({ publisher: publisher }, {}, (err, products) => {
+      // res.status(200).send(products);
+
+      if (err) {
+        res
+          .status(500)
+          .send({ message: `${err.message} - The publisher wasn't found` });
+      } else {
+        res.status(200).send(products);
+      }
+    });
+  };
 }
 
 export default ProductController;
