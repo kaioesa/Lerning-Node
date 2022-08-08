@@ -2,23 +2,29 @@ import products from "../models/Product.js";
 
 class ProductController {
   static getAllProducts = (req, res) => {
-    products.find((err, products) => {
-      res.status(200).json(products);
-    });
+    products
+      .find()
+      .populate("author", "name")
+      .exec((err, products) => {
+        res.status(200).json(products);
+      });
   };
 
   static getProductById = (req, res) => {
     const id = req.params.id;
 
-    products.findById(id, (err, products) => {
-      if (err) {
-        res
-          .status(400)
-          .send({ message: `${err.message} - Product id not found.` });
-      } else {
-        res.status(200).send(products);
-      }
-    });
+    products
+      .findById(id)
+      .populate("author", "name")
+      .exec((err, products) => {
+        if (err) {
+          res
+            .status(400)
+            .send({ message: `${err.message} - Product id not found.` });
+        } else {
+          res.status(200).send(products);
+        }
+      });
   };
 
   static createProduct = (req, res) => {
